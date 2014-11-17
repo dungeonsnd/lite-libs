@@ -1,13 +1,13 @@
 #!/bin/sh
 
-cpprepos=/home/test/.src/toc-new/cpprepos
+cpprepos=~/.src/git_src/cppmaven/cpprepos/
 
 d_est=$cpprepos/est-0.1
 d_libevent=$cpprepos/libevent-2.0.21-stable
 d_cppfastdevelop=$cpprepos/cppfastdevelop
 d_hiredis=$cpprepos/hiredis-master
 cd src
-
+:x
 g++ -Wall -g -O0 server_main.cpp my_io_cb.cpp cache_cmd.cpp -o server_main  \
 -I $d_est/include  \
 -I $d_libevent/include  \

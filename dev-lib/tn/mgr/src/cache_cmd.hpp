@@ -6,6 +6,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+class ReplyGuard
+{
+public:
+    ReplyGuard(redisReply * reply):_reply(reply){}
+    ~ReplyGuard(){freeReplyObject(_reply);}
+    redisReply * _reply;
+};
+
 extern CacheAsync * my_cache;
 
 inline void SetCacheAsync(CacheAsync * cache)
@@ -19,9 +28,27 @@ inline void cmd_step0_cb(redisAsyncContext *c, void *r, void *privdata)
     printf("--cmd_step0_cb-- \n");
     redisReply *reply = (redisReply *)r;
     if (reply == NULL) return;
+        
+    printf("reply->type=%d \n",reply->type);
+    std::string data; 
+    if(reply->type==REDIS_REPLY_NIL)
+    {
+        data ="not found!";
+    }
+    else if(reply->type==REDIS_REPLY_STRING)
+    {
+        data.assign(reply->str);
+    }
+    else if(reply->type==REDIS_REPLY_INTEGER)
+    {
+        data.assign(12,'\0');
+        snprintf(&data[0],data.size(),"%lld",reply->integer);
+    }
+    else 
+    {
+        data ="result unaccepted!";
+    }
     
-    CacheCmdArg * cmdargs =(CacheCmdArg *)privdata;
-    std::string data(reply->str); 
     unsigned t=data.size();
     std::string bd(t+4,'\0');
     t=htonl(t);
@@ -30,6 +57,7 @@ inline void cmd_step0_cb(redisAsyncContext *c, void *r, void *privdata)
     
     printf("reply:%s \n",data.c_str());
     
+    CacheCmdArg * cmdargs =(CacheCmdArg *)privdata;
     int rt =bufferevent_write(cmdargs->_bev,bd.c_str(), bd.size());
     delete cmdargs;
     if(0!=rt) // TODO:

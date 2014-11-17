@@ -5,7 +5,7 @@ import struct
 import threading
 from multiprocessing import Process
 
-ttl =2
+ttl =1
 
 threads_cnt = 1
 
@@ -30,6 +30,7 @@ def thread_proc(nloop):
             buf ='set a b'
         else:
             buf ='get a'
+        buf='rpush l a'
         
         b =struct.pack('!I',len(buf))
         s.sendall(b+buf)

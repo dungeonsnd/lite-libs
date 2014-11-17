@@ -129,9 +129,12 @@ void my_acceptcb(evutil_socket_t listener, short event, void *arg)
     
     printf("specId=%d \n",acceptcbArg->specId);
     
+    static int sessionid =-1;
+    if(++sessionid>10000000)
+        sessionid=0;
     est::T_Session output_session;
     std::string errorstr;
-    int rt =est::CreateSessionByFd(acceptcbArg->base,fd,acceptcbArg->specId,
+    int rt =est::CreateSessionByFd(acceptcbArg->base,fd,acceptcbArg->specId,sessionid,                      
                       my_readcb,my_writecb,my_errorcb,
                       output_session,errorstr);
     if(0!=rt) // error!

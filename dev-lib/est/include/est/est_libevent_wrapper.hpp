@@ -92,7 +92,7 @@ inline int CreateEventListener(T_ListenInfo & _listenInfo,
 }
 
 
-inline int CreateSessionByFd(event_base * base,int fd,int specId,
+inline int CreateSessionByFd(event_base * base,int fd,int specId,int sessionId,
                       est_funcIocb readcb,est_funcIocb writecb,est_funcErrorcb errorcb,
                       T_Session & output_session,
                       std::string & errorstr)
@@ -144,7 +144,7 @@ inline int CreateSessionByFd(event_base * base,int fd,int specId,
         int remoteIp =int(peer_addr.sin_addr.s_addr);
         int connectedTime =int(time(NULL));
         
-        Session * psession =new SessionBase(specId,localPort,remotePort,localIp,remoteIp,connectedTime,bev);
+        Session * psession =new SessionBase(specId,sessionId,localPort,remotePort,localIp,remoteIp,connectedTime,bev);
         output_session.reset(psession);     
         bufferevent_setcb(bev, readcb, writecb, errorcb, psession);
     }while(0);

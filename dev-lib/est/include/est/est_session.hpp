@@ -19,6 +19,7 @@ public:
 
     Status _status;
     int _specid; // 标识这个session的识别号，如front-end,back-end,mantainance.
+    int _sessionid; // 用于标识唯一session, 应用fd可能被重用的情况.
     int _bodySize;
     int _localPort;
     int _remotePort;
@@ -28,6 +29,7 @@ public:
     bufferevent * _bev;
     
     SessionBase(int specid,
+            int sessionid,
             int localPort,
             int remotePort,
             int localIp,
@@ -36,6 +38,7 @@ public:
             bufferevent * bev):
         _status(STATUS_RECVING_HEADER),
         _specid(specid),
+        _sessionid(sessionid),
         _bodySize(0),
         _localPort(localPort),
         _remotePort(remotePort),
