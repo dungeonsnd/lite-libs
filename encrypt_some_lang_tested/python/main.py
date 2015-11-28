@@ -17,6 +17,7 @@ input ='abcd'*4
 key ='a'*16
 iv ='x'*16
 cipher =AES.new(key, AES.MODE_CBC, iv).encrypt(input)
-print HexToStr(cipher)
+print 'encrypt hex:',HexToStr(cipher)
+print 'encrypt base64:',Base64Encode(cipher)
 print [ord(c) for c in cipher]
 print AES.new(key, AES.MODE_CBC, iv).decrypt(cipher)

@@ -31,7 +31,6 @@ func main() {
     strings.NewReader("abcdabcdabcdabcd").Read(cleartext)
 
     ciphertext := make([]byte, aes.BlockSize)
-//    cip, _ := aes.NewCipher(key)
 
     block, err := aes.NewCipher(key)
     if err != nil {
@@ -41,18 +40,14 @@ func main() {
     aes := cipher.NewCBCEncrypter(block, iv)
     aes.CryptBlocks(ciphertext, cleartext)
 
-//    cip.Encrypt(ciphertext, cleartext)
     fmt.Println("明文：", cleartext)
-//    fmt.Println("密文：", string(base64Encode(ciphertext)))
+    fmt.Println("密文 Base64：", string(base64Encode(ciphertext)))
     fmt.Println("密文：", ciphertext)
-    //fmt.Println("密文：", ciphertext)
 
     aes = cipher.NewCBCDecrypter(block, iv)
     aes.CryptBlocks(ciphertext, cleartext)
     
-//    cip.Decrypt(cleartext, ciphertext)
     fmt.Println("明文：", cleartext)
-    fmt.Printf("明文： %s", cleartext)
 
 }
 

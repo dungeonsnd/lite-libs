@@ -3,6 +3,12 @@
 #include <stdlib.h>
 #include <openssl/aes.h>
 
+/*
+len=16
+encrypted string =ae0a18944d22e0685d415a821a93679d
+decrypted string =abcdabcdabcdabcd
+*/
+
 
 int main(int argc, char** argv) {
 
@@ -37,8 +43,9 @@ int main(int argc, char** argv) {
         exit(-1);
     }
     //padding! Important!       
-    //memset( input_string,len-strlen(argv[1]),len );
+    memset( input_string,len-strlen(argv[1]),len );
     strncpy((char*)input_string, argv[1], strlen(argv[1]));
+
     
     // Generate AES 128-bit key
     memset(key, 'a', AES_BLOCK_SIZE);
@@ -68,7 +75,7 @@ int main(int argc, char** argv) {
         fprintf(stderr, "Unable to allocate memory for decrypt_string\n");
         exit(-1);
     }
-    
+
     // Set decryption key
     memset(iv, 'x', AES_BLOCK_SIZE);
     if (AES_set_decrypt_key(key, 128, &aes) < 0) {
@@ -82,11 +89,12 @@ int main(int argc, char** argv) {
 
     // print
 //    printf("input_string =%s\n", input_string);
-//    printf("encrypted string =");
+    printf("encrypted string =");
     for (i=0; i<len; ++i) {
         printf("%02x", (unsigned char)(encrypt_string[i]));
     }
     printf("\n");
+    printf("decrypted string =");
     printf("%s\n", decrypt_string);
 
 
